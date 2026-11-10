@@ -1,0 +1,23 @@
+# 抓包原始数据（含个人信息，绝不提交）
+capture*.json
+*.har
+proxypin*.json
+
+# 中间清单
+media.json
+
+# 导出的照片与视频
+downloads/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# 编辑器 / 系统
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
