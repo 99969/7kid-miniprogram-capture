@@ -24,7 +24,7 @@
 ### 2. 提取媒体清单
 
 ```bash
-python extract.py capture.json --api-host parent.example.com --authors "张老师,李老师" -o media.json
+python extract.py capture.json --api-host parent.7kid.com --authors "张老师,李老师" -o media.json
 ```
 
 输出示例：
@@ -42,7 +42,7 @@ python extract.py capture.json --api-host parent.example.com --authors "张老�
 ### 3. 下载图片和视频
 
 ```bash
-python download.py media.json --out ./downloads --referer https://parent.example.com/
+python download.py media.json --out ./downloads --referer https://parent.7kid.com/
 ```
 
 - `--referer`：**强烈建议填**。不少 CDN 校验 Referer，不填会 403/404。填业务站点的根地址即可。
@@ -108,6 +108,29 @@ python serve.py 8899 ./downloads --lan
   ]
 }
 ```
+
+---
+
+## 7kid 小程序参考
+
+已针对 7kid 家长端（AppID `wxb8e4ed6a71d9c2a9`）实测通过，完整信息见 **[docs/7kid.md](docs/7kid.md)**。抓包时记住三点：
+
+| 环节 | 要点 |
+|---|---|
+| 定位 | 微信进程（`com.tencent.mm`）下 host 含 `7kid.com` 的请求，UA 带 `miniProgram/wxb8e4ed6a71d9c2a9` |
+| 必抓 | `POST /api/moment/v1/parent/moment/get-list` 的**响应体** —— 媒体 URL 全在这里 |
+| 下载 | 图片直链无需鉴权；**视频必须带 `--referer https://parent.7kid.com/`**，否则 404 |
+
+媒体直链形如：
+
+```
+https://resource-pro.7kid.com/7kid/cloud/resouce/<YYYYMM>/<userId>/<ts>-<ts>.jpg
+                                      ^^^^^^^ 官方就是这么拼的，不是笔误
+```
+
+去掉 `?x-oss-process=...` 整段 query 就是原图；视频 `fileType` 标成 `mp4`，实际可能是 `.mov`。
+
+各域名分工：`parent.7kid.com` 业务接口（需 Bearer）、`kidapi.7kid.com` 换 token、`resource-pro.7kid.com` 媒体 CDN（**无需鉴权**）。所以本工具只吃抓包、不复刻登录态。
 
 ---
 
