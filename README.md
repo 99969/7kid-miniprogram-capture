@@ -132,6 +132,8 @@ https://resource-pro.7kid.com/7kid/cloud/resouce/<YYYYMM>/<userId>/<ts>-<ts>.jpg
 
 各域名分工：`parent.7kid.com` 业务接口（需 Bearer）、`kidapi.7kid.com` 换 token、`resource-pro.7kid.com` 媒体 CDN（**无需鉴权**）。所以本工具只吃抓包、不复刻登录态。
 
+接口集合（Postman v2.1）：**[`api/7kid.postman_collection.json`](api/7kid.postman_collection.json)** —— 6 个分组 26 个请求，导入后把 `{{token}}`、`{{sign}}` 填上就能逐个调试。注意 POST 编码不统一：`get-list`、`msg/unread` 是 JSON，`parent-login`、`album-detail`、`get-by-id` 是 form-urlencoded。
+
 ---
 
 ## 常见问题
